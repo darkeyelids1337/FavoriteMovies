@@ -14,15 +14,18 @@
     </div>
     <div class="movies" v-if="movieStore.activeTab === 1">
       <h3>All movies ( count: {{movieStore.totalCountMovies }})</h3>
-      <Movie v-for="movie of movieStore.movies" :key="movie.id" :movie="movie"></Movie>
+      <Movie v-for="movie of movieStore.movies" :key="movie.filmId" :movie="movie"></Movie>
     </div>
-    <div class="search" v-if="movieStore.activeTab === 2">Search</div>
+    <div class="search" v-if="movieStore.activeTab === 2">
+      <Search></Search>
+    </div>
   </main>
 </template>
 
 <script setup>
 import { useMovieStore } from './stores/MovieStore';
 import Movie from './components/Movie.vue';
+import Search from './components/Search.vue';
 const setTab = (id) => {
   movieStore.setActiveTab(id)
 }

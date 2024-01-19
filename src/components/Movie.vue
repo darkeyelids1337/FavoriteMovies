@@ -1,17 +1,20 @@
 <template>
     <div class="movie">
-        <img :src="`https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`" :alt="movie.original_title" class="movie-img">
+        <img :src="movie.posterUrl" :alt="movie.original_title" class="movie-img">
         <div>
             <div class="movie-name">
-                {{ movie.original_title }} ({{ movie.release_date }})
+                {{ movie.nameEn }} ({{ movie.year }})
             </div>
-            <div class="movie-overview">{{ movie.overview }}</div>
-            <div class="movie-buttons">
-                <button class="btn movie-buttons-watched" @click="movieStore.toggleWatched(movie.id)">
+            <div class="movie-overview">{{ movie.description }}</div>
+            <div class="movie-buttons" v-if="!isSearch">
+                <button class="btn movie-buttons-watched" @click="movieStore.toggleWatched(movie.filmId)">
                     <span v-if="!movie.isWatched">Watched</span>
                     <span v-else>Unwatched</span>
                 </button>
-                <button class="btn movie-buttons-delete" @click="movieStore.deleteMovie(movie.id)">Delete</button>
+                <button class="btn movie-buttons-delete" @click="movieStore.deleteMovie(movie.filmId)">Delete</button>
+            </div>
+            <div class="movie-buttons" v-else>
+                <button class="btn movie-buttons-watched" @click="searchStore.addToUserMovies(movie)">Add</button>
             </div>
         </div>
     </div>
@@ -19,13 +22,19 @@
 
 <script setup>
 import { useMovieStore } from '../stores/MovieStore';
-
+import { useSearchStore } from '../stores/SearchStore';
 const movieStore = useMovieStore();
-const props = defineProps({
+const searchStore = useSearchStore();
+const props = defineProps({ 
     movie:{
         type: Object,
         required: true,
         default: () => {}
+    },
+    isSearch:{
+      type: Boolean,
+      required:false,
+      default: false
     }
 })
 </script>
